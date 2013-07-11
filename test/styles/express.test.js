@@ -96,6 +96,15 @@ describe('express', function() {
       });
     });
     
+    describe('failing to subtitute a required placeholder', function() {
+      it('should throw an error', function() {
+        expect(function() {
+          express.transform('/user/:id', { xid: '1234' });
+        }).to.throw(Error)
+          .and.to.throw('Failed to substitute :id in pattern /user/:id');
+      });
+    });
+    
   });
   
 });
