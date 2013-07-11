@@ -59,4 +59,43 @@ describe('express', function() {
     
   });
   
+  describe('transform', function() {
+    
+    describe('pattern with a placeholder', function() {
+      var path = express.transform('/user/:id', { id: '1234' });
+    
+      it('should fully expand template', function() {
+        expect(path).to.be.equal('/user/1234');
+      });
+    });
+    
+    describe('pattern with a placeholder followed by a segment', function() {
+      var path = express.transform('/user/:id/picture', { id: '1234' });
+    
+      it('should fully expand template', function() {
+        expect(path).to.be.equal('/user/1234/picture');
+      });
+    });
+    
+    describe('pattern with two consequtive placeholders', function() {
+      var path = express.transform('/user/:id/:username', { id: '1234', username: 'bob' });
+    
+      it('should fully expand template', function() {
+        expect(path).to.be.equal('/user/1234/bob');
+      });
+    });
+    
+    describe('pattern with optional placeholder preceded by dot', function() {
+      var pattern = '/products.:format?';
+    
+      it('should expand optional placeholder when present', function() {
+        expect(express.transform(pattern, { format: 'json' })).to.be.equal('/products.json');
+      });
+      it('should remove optional placeholder when not present', function() {
+        expect(express.transform(pattern, {})).to.be.equal('/products');
+      });
+    });
+    
+  });
+  
 });
