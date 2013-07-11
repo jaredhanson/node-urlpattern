@@ -96,6 +96,17 @@ describe('express', function() {
       });
     });
     
+    describe('pattern with optional placeholder preceded by slash', function() {
+      var pattern = '/service/:op?';
+    
+      it('should expand optional placeholder when present', function() {
+        expect(express.transform(pattern, { op: 'edit' })).to.be.equal('/service/edit');
+      });
+      it('should remove optional placeholder when not present', function() {
+        expect(express.transform(pattern, {})).to.be.equal('/service');
+      });
+    });
+    
     describe('failing to subtitute a required placeholder', function() {
       it('should throw an error', function() {
         expect(function() {
